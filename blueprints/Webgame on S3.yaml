@@ -17,7 +17,7 @@ inputs:
     allowed-values: ["Private", "PublicRead", "PublicReadWrite"]
 outputs:
   Webgame Link:
-    value: '{{ .grains.["S3 Webapp Upload"].outputs.endpoint }}'
+    value: '{{ .grains.["S3 Webapp Upload"].outputs.website_link }}'
     quick: true
 grains:
   S3 Bucket:
