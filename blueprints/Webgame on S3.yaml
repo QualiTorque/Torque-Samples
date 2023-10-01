@@ -56,4 +56,4 @@ grains:
           commands:
             - "echo fetching Webgame page"
             - "apt-get install curl -y"
-            - "curl -I {{ .grains.["S3 Webapp Upload"].outputs.website_link }} | head -n 1"
+            - 'curl -I {{ .grains.["S3 Webapp Upload"].outputs.website_link }} | head -n 1'
