@@ -20,7 +20,7 @@ grains:
     spec:
       source:
         store: Torque-Samples
-        path: assets/CloudFormation/AWS-Env-Infra.yaml
+        path: assets/cloudformation/MultiSubnetVPC.yaml
       inputs:
       - Region: '{{ .inputs.aws_region }}'
       env-vars: []
