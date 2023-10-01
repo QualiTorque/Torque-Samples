@@ -33,7 +33,7 @@ outputs:
     value: '{{ .grains.Wordpress_VM.outputs.wordpress-ip }}'
     quick: false
 grains:
-  MultiSubnetVPC:
+  Multi Subnet VPC:
     kind: blueprint
     spec:
       source: 
@@ -60,9 +60,9 @@ grains:
       - DB_NAME: '{{ .inputs.DB_NAME }}'
       - DB_PASS: '{{ .inputs.DB_PASS }}'
       - DB_USER: '{{ .inputs.DB_USER }}'
-      - app_subnet_id: '{{ .grains.MultiSubnetVPC.outputs.app_subnet_a_id }}'
+      - app_subnet_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
       - aws_region: '{{ .inputs.aws_region }}'
-      - default_security_group_id: '{{ .grains.MultiSubnetVPC.outputs.default_security_group_id }}'
+      - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
       - instance_type: t3a.medium
       - keypair_name: '{{ .inputs.keypair_name }}'
       - use_public_ip: true
@@ -83,10 +83,10 @@ grains:
       - DB_NAME: '{{ .inputs.DB_NAME }}'
       - DB_PASS: '{{ .inputs.DB_PASS }}'
       - DB_USER: '{{ .inputs.DB_USER }}'
-      - app_subnet_a_id: '{{ .grains.MultiSubnetVPC.outputs.app_subnet_a_id }}'
-      - app_subnet_b_id: '{{ .grains.MultiSubnetVPC.outputs.app_subnet_b_id }}'
+      - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
+      - app_subnet_b_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_b_id }}'
       - aws_region: '{{ .inputs.aws_region }}'
-      - default_security_group_id: '{{ .grains.MultiSubnetVPC.outputs.default_security_group_id }}'
+      - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
       - instance_type: t3a.medium
       - keypair_name: '{{ .inputs.keypair_name }}'
       - mysql_private_dns: '{{ .grains.MySQL_VM.outputs.mysql-private-dns }}'
