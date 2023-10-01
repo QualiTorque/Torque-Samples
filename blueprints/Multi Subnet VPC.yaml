@@ -19,7 +19,7 @@ grains:
     kind: cloudformation
     spec:
       source:
-        store: assets
+        store: Torque-Samples
         path: assets/CloudFormation/AWS-Env-Infra.yaml
       inputs:
       - Region: '{{ .inputs.aws_region }}'
@@ -30,4 +30,4 @@ grains:
       - DefaultSecurityGroupID
       region: '{{ .inputs.aws_region }}'
       authentication:
-      - AWS TorqueDemo Production
+      - AWS-TorqueDemo-Production
