@@ -8,12 +8,16 @@ inputs:
     description: "The name of the AWS Region to use"
     default: "il-central-1"
     allowed-values: ["us-west-1", "il-central-1", "eu-west-1"]
+  Access Control:
+    type: string
+    description: >
+      Type of access to configure on Bucket objects: Private, PublicRead, PublicReadWrite, AuthenticatedRead,
+      LogDeliveryWrite, BucketOwnerRead, BucketOwnerFullControl, or AwsExecRead
+    default: "PublicRead"
+    allowed-values: ["Private", "PublicRead", "PublicReadWrite"]
 outputs:
   Webgame Link:
-    value: '{{ .grains.S3-Webapp.outputs.endpoint }}'
-    quick: true
-  Documentation Page:
-    value: "https://quali.atlassian.net/wiki/spaces/QS/pages/2691399681/Webgame+on+Cloud+Storage+Service"
+    value: '{{ .grains.["S3 Webapp Upload"].outputs.endpoint }}'
     quick: true
 grains:
   S3 Bucket:
@@ -33,7 +37,7 @@ grains:
       - DomainName
   S3 Webapp Upload:
     kind: terraform
-    depends-on: CFN-S3-Bucket
+    depends-on: S3 Bucket
     spec:
       source:
         store: Torque-Samples
@@ -50,7 +54,7 @@ grains:
     depends-on: S3 Webapp Upload
     spec:
       agent:
-        name: demo-prod
+        name: sample-agent
       activities:
         deploy:
           commands:
