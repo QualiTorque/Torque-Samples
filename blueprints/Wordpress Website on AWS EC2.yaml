@@ -1,0 +1,97 @@
+spec_version: 2
+description:  Wordpress app deployed on EC2 Instances with Instance based MySQL DB deployed using re-usable TF building blocks and nested Blueprint
+
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  DB_NAME:
+    type: string
+    default: wordpress_demo
+  DB_PASS:
+    type: string
+    default: 12345
+    sensitive: true
+  DB_USER:
+    type: string
+    default: root
+  aws_region:
+    type: string
+    default: il-central-1
+    allowed-values: ["il-central-1", "eu-west-1"]
+  keypair_name:
+    type: string
+    default: TorqueSandbox
+
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  MySQL IP:
+    value: '{{ .grains.MySQL_VM.outputs.mysql-ip }}'
+    quick: false
+  Wordpress Website:
+    value: '{{ .grains.Wordpress_VM.outputs.wordpress-address }}'
+    quick: true
+  Wordpress IP:
+    value: '{{ .grains.Wordpress_VM.outputs.wordpress-ip }}'
+    quick: false
+grains:
+  MultiSubnetVPC:
+    kind: blueprint
+    spec:
+      source: 
+        store: Torque-Samples
+        path: blueprints
+      agent:
+        name: sample-agent
+      inputs:
+        - aws_region: '{{ .inputs.aws_region }}'
+      outputs:
+        - app_subnet_a_id
+        - app_subnet_b_id
+        - default_security_group_id
+  MySQL_VM:
+    kind: terraform
+    depends-on: Multi Subnet VPC
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/terraform/aws/mysql_vm
+      agent:
+        name: sample-agent
+      inputs:
+      - DB_NAME: '{{ .inputs.DB_NAME }}'
+      - DB_PASS: '{{ .inputs.DB_PASS }}'
+      - DB_USER: '{{ .inputs.DB_USER }}'
+      - app_subnet_id: '{{ .grains.MultiSubnetVPC.outputs.app_subnet_a_id }}'
+      - aws_region: '{{ .inputs.aws_region }}'
+      - default_security_group_id: '{{ .grains.MultiSubnetVPC.outputs.default_security_group_id }}'
+      - instance_type: t3a.medium
+      - keypair_name: '{{ .inputs.keypair_name }}'
+      - use_public_ip: true
+      env-vars: []
+      outputs:
+      - mysql-ip
+      - mysql-private-dns
+  Wordpress_VM:
+    kind: terraform
+    depends-on: Multi Subnet VPC
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/terraform/aws/wordpress_vm
+      agent:
+        name: sample-agent
+      inputs:
+      - DB_NAME: '{{ .inputs.DB_NAME }}'
+      - DB_PASS: '{{ .inputs.DB_PASS }}'
+      - DB_USER: '{{ .inputs.DB_USER }}'
+      - app_subnet_a_id: '{{ .grains.MultiSubnetVPC.outputs.app_subnet_a_id }}'
+      - app_subnet_b_id: '{{ .grains.MultiSubnetVPC.outputs.app_subnet_b_id }}'
+      - aws_region: '{{ .inputs.aws_region }}'
+      - default_security_group_id: '{{ .grains.MultiSubnetVPC.outputs.default_security_group_id }}'
+      - instance_type: t3a.medium
+      - keypair_name: '{{ .inputs.keypair_name }}'
+      - mysql_private_dns: '{{ .grains.MySQL_VM.outputs.mysql-private-dns }}'
+      - use_public_ip: true
+      env-vars: []
+      outputs:
+      - wordpress-address
+      - wordpress-ip
