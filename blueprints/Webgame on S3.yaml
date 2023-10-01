@@ -1,0 +1,59 @@
+spec_version: 2
+description: Web-based game deployed as a static website on S3 using CFN and TF
+inputs:
+  Bucket Name:
+    description: "The name of the storage bucket that will be created"
+    default: "webapp-bucket"
+  AWS Region:
+    description: "The name of the AWS Region to use"
+    default: "il-central-1"
+    allowed-values: ["us-west-1", "il-central-1", "eu-west-1"]
+outputs:
+  Webgame Link:
+    value: '{{ .grains.S3-Webapp.outputs.endpoint }}'
+    quick: true
+  Documentation Page:
+    value: "https://quali.atlassian.net/wiki/spaces/QS/pages/2691399681/Webgame+on+Cloud+Storage+Service"
+    quick: true
+grains:
+  S3 Bucket:
+    kind: cloudformation
+    spec: 
+      source:
+        store: Torque-Samples
+        path: assets/cloudformation/AWSS3Bucket.yaml
+      region: '{{ .inputs.["AWS Region"] }}'
+      authentication:
+      - AWS-TorqueDemo-Production
+      inputs:
+      - AccessControl: '{{ .inputs.["Access Control"] }}'
+      - BucketName: '{{ .inputs.["Bucket Name"] }}-{{ envid | downcase }}'
+      outputs:
+      - Arn
+      - DomainName
+  S3 Webapp Upload:
+    kind: terraform
+    depends-on: CFN-S3-Bucket
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/terraform/aws/s3-upload-webapp
+      agent:
+        name: sample-agent
+      inputs:
+      - bucket_name: '{{ .inputs.["Bucket Name"] }}-{{ envid | downcase }}'
+      - region: '{{ .inputs.["AWS Region"] }}'
+      outputs:
+      - website_link
+  App Health Check:
+    kind: shell
+    depends-on: S3 Webapp Upload
+    spec:
+      agent:
+        name: demo-prod
+      activities:
+        deploy:
+          commands:
+            - "echo fetching Webgame page"
+            - "apt-get install curl -y"
+            - "curl -I {{ .grains.["S3 Webapp Upload"].outputs.website_link }} | head -n 1"

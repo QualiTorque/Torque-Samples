@@ -1,0 +1,38 @@
+Parameters:
+  AccessControl:
+    Type: String
+    Default: PublicRead
+    Description: Access Control value
+  BucketName:
+    Type: String
+    Default: my-bucket
+    Description: Logical Bucket Name
+Outputs:
+  Arn:
+    Description: The Bucket Arn
+    Value: !GetAtt 
+      - MyBucket
+      - Arn
+  DomainName:
+    Description: The Bucket Domain Name
+    Value: !GetAtt 
+      - MyBucket
+      - DomainName
+Description: Creates an S3 Bucket
+Resources:
+  MyBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter
+      BucketName: !Ref BucketName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  
