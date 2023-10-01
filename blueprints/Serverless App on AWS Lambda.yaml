@@ -1,0 +1,47 @@
+spec_version: 2
+description: A Hello World JS API Backened app running on AWS Lambda 
+
+inputs:
+  AWS Region:
+    type: string
+    default: il-central-1
+  API Input:
+    type: string
+    default: Torque
+
+outputs:
+  Serverless API App URL:
+    value: '{{ .grains.["Serverless API"].outputs.base_url }}/hello?Name={{ .inputs.["API Input"] }}'
+    quick: true
+
+grains:
+  Serverless API:
+    kind: terraform
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/terraform/aws/hello-world-lambda
+      agent:
+        name: sample-agent
+      inputs:
+      - aws_region: '{{ .inputs.["AWS Region"] }}'
+      - lambda_bucket_name: torque-lambda-storage
+      - lambda_iam_role: torque-lambda-exec
+      env-vars: []
+      outputs:
+      - base_url
+      - function_name
+      - lambda_bucket_name
+
+  Health Check:
+    kind: shell
+    depends-on: Serverless API
+    spec:
+      agent:
+        name: sample-agent
+      activities:
+        deploy:
+          commands:
+            - "echo fetching lambda api"
+            - "apt-get install curl -y -qq"
+            - 'curl {{ .grains.["Serverless API"].outputs.base_url }}/hello?Name={{ .inputs.["API Input"] }} -s'
