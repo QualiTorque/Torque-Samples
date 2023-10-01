@@ -20,7 +20,7 @@ outputs:
     value: '{{ .grains.["S3 Webapp Upload"].outputs.website_link }}'
     quick: true
 grains:
-  S3 Bucket:
+  S3-Bucket:
     kind: cloudformation
     spec: 
       source:
@@ -37,7 +37,7 @@ grains:
       - DomainName
   S3 Webapp Upload:
     kind: terraform
-    depends-on: S3 Bucket
+    depends-on: S3-Bucket
     spec:
       source:
         store: Torque-Samples
