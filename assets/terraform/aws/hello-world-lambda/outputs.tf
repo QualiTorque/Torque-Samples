@@ -17,3 +17,7 @@ output "base_url" {
 
   value = aws_apigatewayv2_stage.lambda_stage.invoke_url
 }
+
+output "test_output" {
+  value = data.http.test_api_call.response_body
+}

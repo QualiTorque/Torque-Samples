@@ -109,3 +109,8 @@ resource "aws_lambda_permission" "hello_world_func_permission" {
 
   source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }
+
+data "http" "test_api_call" {
+  depends_on = [ aws_apigatewayv2_stage.lambda_stage ]
+  url = "${aws_apigatewayv2_stage.lambda_stage.invoke_url}/hello?Name=Terraform Test"
+}

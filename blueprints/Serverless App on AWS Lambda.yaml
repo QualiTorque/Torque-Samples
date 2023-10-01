@@ -2,9 +2,6 @@ spec_version: 2
 description: A Hello World JS API Backened app running on AWS Lambda 
 
 inputs:
-  AWS Region:
-    type: string
-    default: il-central-1
   API Input:
     type: string
     default: Torque
@@ -13,6 +10,8 @@ outputs:
   Serverless API App URL:
     value: '{{ .grains.["Serverless API"].outputs.base_url }}/hello?Name={{ .inputs.["API Input"] }}'
     quick: true
+  Test API Call Output:
+    value: '{{ .grains.["Serverless API"].outputs.test_output }}'
 
 grains:
   Serverless API:
@@ -24,7 +23,7 @@ grains:
       agent:
         name: sample-agent
       inputs:
-      - aws_region: '{{ .inputs.["AWS Region"] }}'
+      - aws_region: us-east-1
       - lambda_bucket_name: torque-lambda-storage
       - lambda_iam_role: torque-lambda-exec
       env-vars: []
