@@ -72,7 +72,7 @@ grains:
       - mysql-private-dns
   Wordpress_VM:
     kind: terraform
-    depends-on: Multi Subnet VPC
+    depends-on: Multi Subnet VPC, MySQL_VM
     spec:
       source:
         store: Torque-Samples
