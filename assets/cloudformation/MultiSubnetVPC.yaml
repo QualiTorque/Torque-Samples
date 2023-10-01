@@ -1,0 +1,125 @@
+# Inputs to the CloudFormation Stack
+Parameters:
+  Region:
+    Type: String
+    Default: us-east-1
+    Description: AWS Region
+# Outputs from the CloudFormation Stack
+Outputs:
+  AppSubnetAID:
+    Description: The ID of App Subnet A
+    Value: 
+      Ref: VPCAppSubnetA 
+  AppSubnetBID:
+    Description: The ID of App Subnet A
+    Value: 
+      Ref: VPCAppSubnetB
+  DefaultSecurityGroupID:
+    Description: The Bucket Domain Name
+    Value: 
+      Ref: VPCSG
+# Stack Description
+Description: Creates standardized Environment Infrastructure - VPC, Subnets, IGW, RouteTables
+Resources:
+  # Main VPC Resource
+  EnvVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.1.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true   
+      Tags:
+        - Key: Name
+          Value: Env_VPC
+  # VPC Subnets: 2 App Subnets + 1 Managemnet subnet. Dynamic Availability Zone selection
+  VPCAppSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref Region
+      VpcId: 
+        Ref: EnvVPC
+      CidrBlock: 10.1.1.0/24
+      MapPublicIpOnLaunch: True
+      Tags:
+        - Key: Name
+          Value: app-subnet-a
+  VPCAppSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: !Ref Region
+      VpcId: 
+        Ref: EnvVPC
+      CidrBlock: 10.1.2.0/24
+      MapPublicIpOnLaunch: True
+      Tags:
+        - Key: Name
+          Value: app-subnet-b
+  # VPC peripheral infrastructure: Internet Gateway, Route Tables, Security Groups. 
+  VPCIGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: env-igw
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: 
+        Ref: EnvVPC
+      InternetGatewayId: 
+        Ref: VPCIGW
+  VPCrouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: 
+        Ref: EnvVPC
+      Tags:
+        - Key: Name
+          Value: public-route-table
+  IGWroute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: 
+        Ref: VPCrouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: 
+        Ref: VPCIGW
+  VPCAppSubnetARTAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: VPCAppSubnetA
+      RouteTableId: 
+        Ref: VPCrouteTable
+  VPCAppSubnetBRTAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: 
+        Ref: VPCAppSubnetB
+      RouteTableId: 
+        Ref: VPCrouteTable
+  VPCSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: DefaultSG
+      GroupDescription: Default Security Group
+      VpcId:
+        Ref: EnvVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 0
+          CidrIp: !GetAtt EnvVPC.CidrBlock
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 0
+          CidrIp: 0.0.0.0/0

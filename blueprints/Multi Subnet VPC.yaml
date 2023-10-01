@@ -1,0 +1,33 @@
+spec_version: 2
+description: A VPC with multiple subnets with an internet gateway (standardized environment for other Blueprints)
+inputs:
+  aws_region:
+    type: string
+    default: il-central-1
+outputs:
+  app_subnet_a_id:
+    value: '{{ .grains.EnvironmentInfrastructure.outputs.AppSubnetAID }}'
+    quick: false
+  app_subnet_b_id:
+    value: '{{ .grains.EnvironmentInfrastructure.outputs.AppSubnetBID }}'
+    quick: false
+  default_security_group_id:
+    value: '{{ .grains.EnvironmentInfrastructure.outputs.DefaultSecurityGroupID }}'
+    quick: false
+grains:
+  EnvironmentInfrastructure:
+    kind: cloudformation
+    spec:
+      source:
+        store: assets
+        path: assets/CloudFormation/AWS-Env-Infra.yaml
+      inputs:
+      - Region: '{{ .inputs.aws_region }}'
+      env-vars: []
+      outputs:
+      - AppSubnetAID
+      - AppSubnetBID
+      - DefaultSecurityGroupID
+      region: '{{ .inputs.aws_region }}'
+      authentication:
+      - AWS TorqueDemo Production
