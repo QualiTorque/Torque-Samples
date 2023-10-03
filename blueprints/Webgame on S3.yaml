@@ -43,7 +43,7 @@ grains:
         store: Torque-Samples
         path: assets/terraform/aws/s3-upload-webapp
       agent:
-        name: sample-agent
+        name: Sample-Agent
       inputs:
       - bucket_name: '{{ .inputs.["Bucket Name"] }}-{{ envid | downcase }}'
       - region: '{{ .inputs.["AWS Region"] }}'
@@ -54,7 +54,7 @@ grains:
     depends-on: S3 Webapp Upload
     spec:
       agent:
-        name: sample-agent
+        name: Sample-Agent
       activities:
         deploy:
           commands:
