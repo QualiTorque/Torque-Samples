@@ -21,7 +21,7 @@ grains:
         store: Torque-Samples
         path: assets/terraform/aws/hello-world-lambda
       agent:
-        name: sample-agent
+        name: Sample-Agent
       inputs:
       - aws_region: us-east-1
       - lambda_bucket_name: torque-lambda-storage
@@ -38,7 +38,7 @@ grains:
     depends-on: Serverless API
     spec:
       agent:
-        name: sample-agent
+        name: Sample-Agent
       activities:
         deploy:
           commands:

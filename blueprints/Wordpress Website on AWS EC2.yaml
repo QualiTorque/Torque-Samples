@@ -53,7 +53,7 @@ grains:
         store: Torque-Samples
         path: assets/terraform/aws/mysql_vm
       agent:
-        name: sample-agent
+        name: Sample-Agent
       inputs:
       - DB_NAME: '{{ .inputs.DB_NAME }}'
       - DB_PASS: '{{ .inputs.DB_PASS }}'
@@ -76,7 +76,7 @@ grains:
         store: Torque-Samples
         path: assets/terraform/aws/wordpress_vm
       agent:
-        name: sample-agent
+        name: Sample-Agent
       inputs:
       - DB_NAME: '{{ .inputs.DB_NAME }}'
       - DB_PASS: '{{ .inputs.DB_PASS }}'
