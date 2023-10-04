@@ -37,11 +37,10 @@ grains:
     kind: terraform
     spec:
       source:
-        store: assets
+        store: Torque-Samples
         path: assets/terraform/aws/rds
       agent:
-        name: demo-prod
-        service-account: app-sa
+        name: Sample-Agent
       inputs:
         - sandbox_id: '{{ envid | downcase }}'
         - size: '{{ .inputs.["DB Engine Instance Size"] }}' 
@@ -60,11 +59,10 @@ grains:
     kind: terraform
     spec: 
       source:
-        store: assets
+        store: Torque-Samples
         path: assets/terraform/aws/s3
       agent:
-        name: demo-prod
-        service-account: app-sa
+        name: Sample-Agent
       inputs:
         - region: eu-west-1
         - acl: public-read
@@ -78,15 +76,14 @@ grains:
     depends-on: MySQL_RDS_DB, S3_Bucket
     spec:
       source:
-        store: assets
+        store: Torque-Samples
         path: assets/helm/robotShop
       agent:
-        name: demo-prod
-        service-account: default
+        name: Sample-Agent
       scripts:
         post-helm-install:
           source:
-            store: assets
+            store: Torque-Samples
             path:  assets/scripts/get-robot-web-address.sh
           arguments: '{{ envid | downcase }}'
           outputs:
