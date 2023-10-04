@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: mysql-{{ .Values.sandboxID }}
+  name: mysql-{{ .Values.sandboxID }}
+spec:
+  ports:
+  - name: mysql-{{ .Values.sandboxID }}
+    port: 3306
+    targetPort: 3306
+  selector:
+    service: mysql-{{ .Values.sandboxID }}

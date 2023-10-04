@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-{{ .Values.sandboxID }}
+  labels:
+    service: user-{{ .Values.sandboxID }}
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    service: user-{{ .Values.sandboxID }}

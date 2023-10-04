@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-{{ .Values.sandboxID }}
+  labels:
+    service: web-{{ .Values.sandboxID }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: {{.Values.hostname}}.{{.Values.domain}}
+    external-dns.alpha.kubernetes.io/ttl: "60"
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    service: web-{{ .Values.sandboxID }}
+  {{ if .Values.nodeport }}
+  type: NodePort
+  {{ else }}
+  type: LoadBalancer
+  {{ end }}
+---
+{{if .Values.ocCreateRoute}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: web-{{ .Values.sandboxID }}
+spec:
+  to:
+    kind: Service
+    name: web-{{ .Values.sandboxID }}
+{{end}}

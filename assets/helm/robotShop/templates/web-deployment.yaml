@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-{{ .Values.sandboxID }}
+  labels:
+    service: web-{{ .Values.sandboxID }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: web-{{ .Values.sandboxID }}
+  template:
+    metadata:
+      labels:
+        service: web-{{ .Values.sandboxID }}
+    spec:
+      {{ if .Values.psp.enabled }}
+      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      {{ end }}
+      containers:
+      - name: web-{{ .Values.sandboxID }}
+        image: {{ .Values.image.repo }}/rs-web:{{ .Values.image.version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          - name: CATALOGUE_HOST
+            value: catalogue-{{ .Values.sandboxID }}
+          - name: USER_HOST
+            value: user-{{ .Values.sandboxID }}
+          - name: CART_HOST
+            value: cart-{{ .Values.sandboxID }}
+          - name: SHIPPING_HOST
+            value: shipping-{{ .Values.sandboxID }}
+          - name: PAYMENT_HOST
+            value: payment-{{ .Values.sandboxID }}
+          - name: RATINGS_HOST
+            value: ratings-{{ .Values.sandboxID }}
+          - name: INSTANA_SERVICE_NAME
+            value: nginx-web-{{ .Values.sandboxID }}
+          {{- if .Values.eum.key }}
+          - name: INSTANA_EUM_KEY
+            value: {{ .Values.eum.key }}
+          - name: INSTANA_EUM_REPORTING_URL
+            value: {{ .Values.eum.url }}
+          {{- end}}
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 200m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
+      restartPolicy: Always

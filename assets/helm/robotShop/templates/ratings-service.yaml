@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratings-{{ .Values.sandboxID }}
+  labels:
+    service: ratings-{{ .Values.sandboxID }}
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    service: ratings-{{ .Values.sandboxID }}
+

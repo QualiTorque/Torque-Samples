@@ -1,0 +1,101 @@
+spec_version: 2
+description: Robot-Shop sample eCommerce MSVC app deployed on a K8S Cluster via Helm and RDS/S3 via TF
+
+inputs:
+  Robot Shop App Version:
+    type: string
+    default: "0.4.3"
+    description: "Version of the robotShop micorservices application"
+  DB Engine Instance Size:
+    type: string
+    default: "small"
+    description: "The instance type of the RDS instance. Small, medium, or large."
+    allowed-values: ["small", "medium", "large"]
+  DB Engine Version:
+    type: string
+    default: "8.0.32"
+    description: "Version of RDS MySQL DB Engine. Default is 8.0.32"
+
+
+# values that starts with '{' for liquid template must be encosed with quotes so YAML won't consider them as dict
+outputs:
+  Robot Shop Site:
+    value: 'http://{{.grains.Robot_Shop_MicroServices.scripts.post-helm-install.outputs.frontend}}:8080'
+    quick: true
+  Robot Shop Site (Friendly DNS): 
+    value: 'robotshop-{{ envid | downcase }}.torque-demo.click:8080'
+    quick: true
+  RDS MySQL DB Hostname:
+    value: '{{ .grains.MySQL_RDS_DB.outputs.hostname }}'
+    quick: false
+  Documentation Page:
+    value: "https://quali.atlassian.net/wiki/spaces/QS/pages/2710142977/Robot+Shop+Stan+s+Robot+Shop"
+    quick: true
+
+grains:
+  MySQL_RDS_DB:
+    kind: terraform
+    spec:
+      source:
+        store: assets
+        path: assets/terraform/aws/rds
+      agent:
+        name: demo-prod
+        service-account: app-sa
+      inputs:
+        - sandbox_id: '{{ envid | downcase }}'
+        - size: '{{ .inputs.["DB Engine Instance Size"] }}' 
+        - allocated_storage: 20
+        - db_name: demo_db
+        - engine_version: '{{ .inputs.["DB Engine Version"] }}'
+        - engine: MySQL
+        - username: adminuser
+        - vpc_id: vpc-02e3bca90b081cd0f
+        - region: us-east-1
+      outputs:
+        - hostname
+        - connection_string
+
+  S3_Bucket:
+    kind: terraform
+    spec: 
+      source:
+        store: assets
+        path: assets/terraform/aws/s3
+      agent:
+        name: demo-prod
+        service-account: app-sa
+      inputs:
+        - region: eu-west-1
+        - acl: public-read
+        - name: 'robotshop-s3-{{ envid | downcase }}'
+      outputs:
+        - s3_bucket_arn
+    tf-version: 1.4.5
+
+  Robot_Shop_MicroServices:
+    kind: helm
+    depends-on: MySQL_RDS_DB, S3_Bucket
+    spec:
+      source:
+        store: assets
+        path: assets/helm/robotShop
+      agent:
+        name: demo-prod
+        service-account: default
+      scripts:
+        post-helm-install:
+          source:
+            store: assets
+            path:  assets/scripts/get-robot-web-address.sh
+          arguments: '{{ envid | downcase }}'
+          outputs:
+            - frontend
+      inputs:
+        - hostname: 'robotshop-{{ envid | downcase }}'
+        - domain: 'torque-demo.click'
+        - version: '{{ .inputs.["Robot Shop App Version"] }}'
+        - connectionString: '{{ .grains.MySQL_RDS_DB.outputs.connection_string }}'
+        - objectStore.S3_BucketArn: '{{ .grains.S3_Bucket.outputs.s3_bucket_arn }}'
+        - redis.storageClassName: gp3
+        - EnvironmentID: '{{ envid | downcase }}'

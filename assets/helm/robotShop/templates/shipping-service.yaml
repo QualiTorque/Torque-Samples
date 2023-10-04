@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping-{{ .Values.sandboxID }}
+  labels:
+    service: shipping-{{ .Values.sandboxID }}
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    service: shipping-{{ .Values.sandboxID }}

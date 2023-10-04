@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-{{ .Values.sandboxID }}
+  labels:
+    service: catalogue-{{ .Values.sandboxID }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: catalogue-{{ .Values.sandboxID }}
+  template:
+    metadata:
+      labels:
+        service: catalogue-{{ .Values.sandboxID }}
+    spec:
+      {{ if .Values.psp.enabled }}
+      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      {{ end }}
+      containers:
+      - name: catalogue-{{ .Values.sandboxID }}
+        image: {{ .Values.image.repo }}/rs-catalogue:{{ .Values.image.version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          - name: INSTANA_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 200m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
+      restartPolicy: Always
