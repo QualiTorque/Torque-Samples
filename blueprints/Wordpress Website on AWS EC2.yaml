@@ -39,8 +39,6 @@ grains:
       source: 
         store: Torque-Samples
         path: blueprints
-      agent:
-        name: sample-agent
       inputs:
         - aws_region: '{{ .inputs.aws_region }}'
       outputs:
