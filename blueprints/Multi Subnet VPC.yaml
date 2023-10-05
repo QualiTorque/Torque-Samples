@@ -21,6 +21,8 @@ grains:
       source:
         store: Torque-Samples
         path: assets/cloudformation/MultiSubnetVPC.yaml
+      agent:
+        name: Sample-Agent
       inputs:
       - Region: '{{ .inputs.aws_region }}'
       env-vars: []
@@ -29,5 +31,3 @@ grains:
       - AppSubnetBID
       - DefaultSecurityGroupID
       region: '{{ .inputs.aws_region }}'
-      authentication:
-      - AWS-TorqueDemo-Production
