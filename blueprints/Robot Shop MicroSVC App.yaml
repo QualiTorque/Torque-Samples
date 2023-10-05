@@ -42,7 +42,7 @@ grains:
       agent:
         name: Sample-Agent
       inputs:
-        - sandbox_id: '{{ envid | downcase }}'
+        - env_id: '{{ envid | downcase }}'
         - size: '{{ .inputs.["DB Engine Instance Size"] }}' 
         - allocated_storage: 20
         - db_name: demo_db
