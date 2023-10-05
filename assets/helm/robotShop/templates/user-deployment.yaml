@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-{{ .Values.sandboxID }}
+  name: user-{{ .Values.EnvironmentID }}
   labels:
-    service: user-{{ .Values.sandboxID }}
+    service: user-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: user-{{ .Values.sandboxID }}
+      service: user-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: user-{{ .Values.sandboxID }}
+        service: user-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: user-{{ .Values.sandboxID }}
+      - name: user-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-user:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:

@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: mysql-{{ .Values.sandboxID }}
-  name: mysql-{{ .Values.sandboxID }}
+    service: mysql-{{ .Values.EnvironmentID }}
+  name: mysql-{{ .Values.EnvironmentID }}
 spec:
   ports:
-  - name: mysql-{{ .Values.sandboxID }}
+  - name: mysql-{{ .Values.EnvironmentID }}
     port: 3306
     targetPort: 3306
   selector:
-    service: mysql-{{ .Values.sandboxID }}
+    service: mysql-{{ .Values.EnvironmentID }}

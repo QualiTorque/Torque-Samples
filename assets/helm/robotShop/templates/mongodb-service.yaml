@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: mongodb-{{ .Values.sandboxID }}
-  name: mongodb-{{ .Values.sandboxID }}
+    service: mongodb-{{ .Values.EnvironmentID }}
+  name: mongodb-{{ .Values.EnvironmentID }}
 spec:
   ports:
   - name: mongo
     port: 27017
     targetPort: 27017
   selector:
-    service: mongodb-{{ .Values.sandboxID }}
+    service: mongodb-{{ .Values.EnvironmentID }}

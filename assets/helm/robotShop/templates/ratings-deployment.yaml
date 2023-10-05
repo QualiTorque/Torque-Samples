@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ratings-{{ .Values.sandboxID }}
+  name: ratings-{{ .Values.EnvironmentID }}
   labels:
-    service: ratings-{{ .Values.sandboxID }}
+    service: ratings-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: ratings-{{ .Values.sandboxID }}
+      service: ratings-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: ratings-{{ .Values.sandboxID }}
+        service: ratings-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: ratings-{{ .Values.sandboxID }}
+      - name: ratings-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-ratings:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

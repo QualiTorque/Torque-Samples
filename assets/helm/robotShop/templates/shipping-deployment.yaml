@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shipping-{{ .Values.sandboxID }}
+  name: shipping-{{ .Values.EnvironmentID }}
   labels:
-    service: shipping-{{ .Values.sandboxID }}
+    service: shipping-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: shipping-{{ .Values.sandboxID }}
+      service: shipping-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: shipping-{{ .Values.sandboxID }}
+        service: shipping-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: shipping-{{ .Values.sandboxID }}
+      - name: shipping-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-shipping:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

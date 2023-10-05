@@ -2,13 +2,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: robot-shop-{{ .Values.sandboxID }}
+  name: robot-shop-{{ .Values.EnvironmentID }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: robot-shop-{{ .Values.sandboxID }}
+  name: robot-shop-{{ .Values.EnvironmentID }}
 subjects:
 - kind: ServiceAccount
-  name: robot-shop-{{ .Values.sandboxID }}
-  namespace: robot-shop-{{ .Values.sandboxID }}
+  name: robot-shop-{{ .Values.EnvironmentID }}
+  namespace: robot-shop-{{ .Values.EnvironmentID }}
 {{ end }}

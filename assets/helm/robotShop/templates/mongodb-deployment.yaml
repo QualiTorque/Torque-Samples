@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb-{{ .Values.sandboxID }}
+  name: mongodb-{{ .Values.EnvironmentID }}
   labels:
-    service: mongodb-{{ .Values.sandboxID }}
+    service: mongodb-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: mongodb-{{ .Values.sandboxID }}
+      service: mongodb-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: mongodb-{{ .Values.sandboxID }}
+        service: mongodb-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: mongodb-{{ .Values.sandboxID }}
+      - name: mongodb-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-mongodb:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

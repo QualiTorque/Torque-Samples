@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: redis-{{ .Values.sandboxID }}
-  name: redis-{{ .Values.sandboxID }}
+    service: redis-{{ .Values.EnvironmentID }}
+  name: redis-{{ .Values.EnvironmentID }}
 spec:
   ports:
-  - name: redis-{{ .Values.sandboxID }}
+  - name: redis-{{ .Values.EnvironmentID }}
     port: 6379
     targetPort: 6379
   selector:
-    service: redis-{{ .Values.sandboxID }}
+    service: redis-{{ .Values.EnvironmentID }}

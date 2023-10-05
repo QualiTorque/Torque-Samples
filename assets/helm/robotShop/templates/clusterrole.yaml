@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: robot-shop-{{ .Values.sandboxID }}
+  name: robot-shop-{{ .Values.EnvironmentID }}
 rules:
 - apiGroups:
   - policy

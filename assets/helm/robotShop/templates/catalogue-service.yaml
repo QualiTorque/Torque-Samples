@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: catalogue-{{ .Values.sandboxID }}
-  name: catalogue-{{ .Values.sandboxID }}
+    service: catalogue-{{ .Values.EnvironmentID }}
+  name: catalogue-{{ .Values.EnvironmentID }}
 spec:
   ports:
   - name: http
     port: 8080
     targetPort: 8080
   selector:
-    service: catalogue-{{ .Values.sandboxID }}
+    service: catalogue-{{ .Values.EnvironmentID }}

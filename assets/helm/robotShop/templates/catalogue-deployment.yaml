@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: catalogue-{{ .Values.sandboxID }}
+  name: catalogue-{{ .Values.EnvironmentID }}
   labels:
-    service: catalogue-{{ .Values.sandboxID }}
+    service: catalogue-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: catalogue-{{ .Values.sandboxID }}
+      service: catalogue-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: catalogue-{{ .Values.sandboxID }}
+        service: catalogue-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: catalogue-{{ .Values.sandboxID }}
+      - name: catalogue-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-catalogue:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:

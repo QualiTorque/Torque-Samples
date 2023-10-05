@@ -2,7 +2,7 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: robot-shop-{{ .Values.sandboxID }}
+  name: robot-shop-{{ .Values.EnvironmentID }}
 spec:
   allowPrivilegeEscalation: false
   fsGroup:

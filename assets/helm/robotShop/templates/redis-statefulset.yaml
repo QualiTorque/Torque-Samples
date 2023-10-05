@@ -2,30 +2,30 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    service: redis-{{ .Values.sandboxID }}
-  name: redis-{{ .Values.sandboxID }}
+    service: redis-{{ .Values.EnvironmentID }}
+  name: redis-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: redis-{{ .Values.sandboxID }}
-  serviceName: redis-{{ .Values.sandboxID }}
+      service: redis-{{ .Values.EnvironmentID }}
+  serviceName: redis-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: redis-{{ .Values.sandboxID }}
+        service: redis-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: redis-{{ .Values.sandboxID }}
+      - name: redis-{{ .Values.EnvironmentID }}
         image: redis:4.0.6
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 6379
         volumeMounts:
-          - name: data-{{ .Values.sandboxID }}
+          - name: data-{{ .Values.EnvironmentID }}
             mountPath: /mnt/redis
         resources:
           limits:
@@ -37,7 +37,7 @@ spec:
       restartPolicy: Always
   volumeClaimTemplates:
     - metadata:
-        name: data-{{ .Values.sandboxID }}
+        name: data-{{ .Values.EnvironmentID }}
       spec:
         accessModes: [ "ReadWriteOnce" ]
         {{ if not .Values.openshift }}

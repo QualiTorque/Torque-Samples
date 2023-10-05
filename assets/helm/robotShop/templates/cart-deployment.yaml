@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cart-{{ .Values.sandboxID }}
+  name: cart-{{ .Values.EnvironmentID }}
   labels:
-    service: cart-{{ .Values.sandboxID }}
+    service: cart-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: cart-{{ .Values.sandboxID }}
+      service: cart-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: cart-{{ .Values.sandboxID }}
+        service: cart-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: cart-{{ .Values.sandboxID }}
+      - name: cart-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-cart:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         # agent networking access

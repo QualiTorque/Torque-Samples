@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabbitmq-{{ .Values.sandboxID }}
+  name: rabbitmq-{{ .Values.EnvironmentID }}
   labels:
-    service: rabbitmq-{{ .Values.sandboxID }}
+    service: rabbitmq-{{ .Values.EnvironmentID }}
 spec:
   ports:
   - name: tcp-amqp
@@ -16,4 +16,4 @@ spec:
     port: 4369
     targetPort: 4369
   selector:
-    service: rabbitmq-{{ .Values.sandboxID }}
+    service: rabbitmq-{{ .Values.EnvironmentID }}

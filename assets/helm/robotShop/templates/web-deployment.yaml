@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-{{ .Values.sandboxID }}
+  name: web-{{ .Values.EnvironmentID }}
   labels:
-    service: web-{{ .Values.sandboxID }}
+    service: web-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: web-{{ .Values.sandboxID }}
+      service: web-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: web-{{ .Values.sandboxID }}
+        service: web-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: web-{{ .Values.sandboxID }}
+      - name: web-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-web:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
           - name: CATALOGUE_HOST
-            value: catalogue-{{ .Values.sandboxID }}
+            value: catalogue-{{ .Values.EnvironmentID }}
           - name: USER_HOST
-            value: user-{{ .Values.sandboxID }}
+            value: user-{{ .Values.EnvironmentID }}
           - name: CART_HOST
-            value: cart-{{ .Values.sandboxID }}
+            value: cart-{{ .Values.EnvironmentID }}
           - name: SHIPPING_HOST
-            value: shipping-{{ .Values.sandboxID }}
+            value: shipping-{{ .Values.EnvironmentID }}
           - name: PAYMENT_HOST
-            value: payment-{{ .Values.sandboxID }}
+            value: payment-{{ .Values.EnvironmentID }}
           - name: RATINGS_HOST
-            value: ratings-{{ .Values.sandboxID }}
+            value: ratings-{{ .Values.EnvironmentID }}
           - name: INSTANA_SERVICE_NAME
-            value: nginx-web-{{ .Values.sandboxID }}
+            value: nginx-web-{{ .Values.EnvironmentID }}
           {{- if .Values.eum.key }}
           - name: INSTANA_EUM_KEY
             value: {{ .Values.eum.key }}

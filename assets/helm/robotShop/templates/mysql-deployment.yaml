@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-{{ .Values.sandboxID }}
+  name: mysql-{{ .Values.EnvironmentID }}
   labels:
-    service: mysql-{{ .Values.sandboxID }}
+    service: mysql-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: mysql-{{ .Values.sandboxID }}
+      service: mysql-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: mysql-{{ .Values.sandboxID }}
+        service: mysql-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: mysql-{{ .Values.sandboxID }}
+      - name: mysql-{{ .Values.EnvironmentID }}
         image: {{ .Values.image.repo }}/rs-mysql-db:{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         # added for Istio

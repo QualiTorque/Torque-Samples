@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rabbitmq-{{ .Values.sandboxID }}
+  name: rabbitmq-{{ .Values.EnvironmentID }}
   labels:
-    service: rabbitmq-{{ .Values.sandboxID }}
+    service: rabbitmq-{{ .Values.EnvironmentID }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: rabbitmq-{{ .Values.sandboxID }}
+      service: rabbitmq-{{ .Values.EnvironmentID }}
   template:
     metadata:
       labels:
-        service: rabbitmq-{{ .Values.sandboxID }}
+        service: rabbitmq-{{ .Values.EnvironmentID }}
     spec:
       {{ if .Values.psp.enabled }}
-      serviceAccountName: robot-shop-{{ .Values.sandboxID }}
+      serviceAccountName: robot-shop-{{ .Values.EnvironmentID }}
       {{ end }}
       containers:
-      - name: rabbitmq-{{ .Values.sandboxID }}
+      - name: rabbitmq-{{ .Values.EnvironmentID }}
         image: rabbitmq:3.7-management-alpine
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
