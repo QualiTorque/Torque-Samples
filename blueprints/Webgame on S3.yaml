@@ -27,8 +27,8 @@ grains:
         store: Torque-Samples
         path: assets/cloudformation/AWSS3Bucket.yaml
       region: '{{ .inputs.["AWS Region"] }}'
-      authentication:
-      - AWS-TorqueDemo-Production
+      agent:
+        name: Sample-Agent
       inputs:
       - AccessControl: '{{ .inputs.["Access Control"] }}'
       - BucketName: '{{ .inputs.["Bucket Name"] }}-{{ envid | downcase }}'
