@@ -49,8 +49,7 @@ grains:
         - engine_version: '{{ .inputs.["DB Engine Version"] }}'
         - engine: MySQL
         - username: adminuser
-        - vpc_id: vpc-02e3bca90b081cd0f
-        - region: us-east-1
+        - region: eu-west-1
       outputs:
         - hostname
         - connection_string
