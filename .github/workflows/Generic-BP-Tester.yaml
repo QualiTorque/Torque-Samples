@@ -68,7 +68,7 @@ jobs:
         fi
 
         itr=0
-        timeout="600"
+        timeout="900"
 
         while [ "$state" == "Launching" ] && [ $itr -lt $timeout ]; do
           echo "State is $state, waiting..."
@@ -118,7 +118,7 @@ jobs:
         fi
 
         itr=0
-        timeout="600"
+        timeout="900"
 
         while [ "$state" == "Terminating" ] && [ $itr -lt $timeout ]; do
           echo "State is $state, waiting..."
