@@ -33,7 +33,7 @@ jobs:
               "description": "Automated Test from Github",
               "duration": "PT16M",
               "source": {
-                "repository_name": "test"
+                "repository_name": "'"$SPACE_BP_REPO_NAME"'"
                 }
               }'
             )
