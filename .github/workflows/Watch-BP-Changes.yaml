@@ -1,5 +1,6 @@
 name: Watch Blueprint Changes
-# test
+
+run-name: Watch Blueprint Changes
 
 env:
   GIT_ORG: 'QualiTorque'
