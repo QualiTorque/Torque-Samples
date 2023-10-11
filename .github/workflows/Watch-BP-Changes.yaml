@@ -8,11 +8,11 @@ env:
   SPACE_BP_REPO_NAME: 'Torque-Samples'
 
 on:
-  # push:
-  #   paths:
-  #     - 'test/*'
-  #   branches:
-  #     - 'master'
+  push:
+    paths:
+      - 'blueprints/*'
+    branches:
+      - 'main'
   workflow_dispatch:
 
 jobs:

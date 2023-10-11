@@ -2,6 +2,8 @@
 
 name: Generic Blueprint Test Validator
 
+run-name: Testing ${{ github.event.client_payload.bp_name }} Blueprint, Triggered by ${{ github.event.action }} job
+
 env:
   SPACE_NAME: 'Samples'
   SPACE_BP_REPO_NAME: 'Torque-Samples'

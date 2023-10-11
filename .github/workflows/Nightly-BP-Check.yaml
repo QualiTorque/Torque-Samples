@@ -8,6 +8,9 @@ env:
   SPACE_BP_REPO_NAME: 'Torque-Samples'
 
 on:
+  # runs Daily at 6:40ish Israel time (3:40 am UTC)
+  schedule:
+    - cron: '40 3 * * *'
   workflow_dispatch:
 
 jobs:
