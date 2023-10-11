@@ -40,7 +40,7 @@ jobs:
 
           curl -X POST https://api.github.com/repos/$GIT_ORG/$GIT_REPO/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
-          -u ${{ secrets.TEST_REPO_PAT }} \
+          -u ${{ secrets.GIT_PAT }} \
           --data '{"event_type": "nightly", "client_payload": { "bp_name": "'"$iter_cleaned"'" }}'
 
         }
