@@ -1,5 +1,6 @@
 name: Nightly Blueprint Check
-# test
+
+run-name: Nightly Blueprint Check
 
 env:
   GIT_ORG: 'QualiTorque'
