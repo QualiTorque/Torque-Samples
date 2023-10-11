@@ -1,0 +1,66 @@
+name: Watch Blueprint Changes
+# test
+
+env:
+  GIT_ORG: 'QualiTorque'
+  GIT_REPO: 'Torque-Samples'
+  SPACE_NAME: 'Samples'
+  SPACE_BP_REPO_NAME: 'Torque-Samples'
+
+on:
+  # push:
+  #   paths:
+  #     - 'test/*'
+  #   branches:
+  #     - 'master'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sync Github
+      id: sync-git
+      run: |
+        echo "Forcing Github Sync"
+        curl -s --request POST \
+                --url https://portal.qtorque.io/api/spaces/$SPACE_NAME/repositories/$SPACE_BP_REPO_NAME/update \
+                --header "Authorization: Bearer ${{ secrets.TORQUE_TOKEN }}" \
+                --header 'Content-Type: application/json'
+    - name: Get Files
+      id: get-files
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+        sparse-checkout: |
+          blueprints
+    - name: Launch Checks
+      id: launch-checks
+      run: |
+
+        start_bp_check() {
+
+          echo "Launching BP named: $iter_cleaned"
+
+          curl -X POST https://api.github.com/repos/$GIT_ORG/$GIT_REPO/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.TEST_REPO_PAT }} \
+          --data '{"event_type": "watch", "client_payload": { "bp_name": "'"$iter_cleaned"'" }}'
+
+        }
+        file_changes=$(git diff HEAD^ HEAD --name-only -- blueprints)
+        if [ -z "$file_changes" ] || [ $file_changes == '[]' ] || [ $file_changes == 'null' ]; then
+          echo "No blueprint changes found"
+          exit 0
+        fi
+        clean_file_changes="$(echo "$file_changes" | sed ':a;N;$!ba;s/\n/,/g')"
+        echo "The following BP changes were detected $clean_file_changes"
+        IFS=',' read -ra ADDR <<< "$clean_file_changes"
+        for i in "${ADDR[@]}"; do
+          # process "$i"
+          iter_cleaned=$(echo $i | sed -e 's/blueprints\/\(.*\).yaml/\1/')
+          start_bp_check
+          # dont overwhelm the api
+          sleep 2s
+        done
+        echo "Done"
