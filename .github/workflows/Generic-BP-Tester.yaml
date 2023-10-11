@@ -1,0 +1,135 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Generic Blueprint Test Validator
+
+env:
+  SPACE_NAME: 'Samples'
+  SPACE_BP_REPO_NAME: 'Torque-Samples'
+
+# Controls when the workflow will run
+on: [repository_dispatch]
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  Test_On_Torque_Environment:
+    name: Test the Blueprint on a Torque Environment
+    runs-on: ubuntu-latest
+    if: github.event.action == 'watch' || github.event.action == 'nightly'
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Start Environment from Blueprint
+      id: start-environment
+      run: |
+
+        echo "Staring Torque Environment"
+        env=$(curl -s --request POST \
+            --url https://portal.qtorque.io/api/spaces/$SPACE_NAME/environments \
+            --header "Authorization: Bearer ${{ secrets.TORQUE_TOKEN }}" \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "environment_name": "${{ github.event.client_payload.bp_name }} Automated Github Test",
+              "blueprint_name": "${{ github.event.client_payload.bp_name }}",
+              "description": "Automated Test from Github",
+              "duration": "PT16M",
+              "source": {
+                "repository_name": "test"
+                }
+              }'
+            )
+        EnvId=$( echo $env | jq --raw-output .id )
+        if [ -z "$EnvId" ] || [ $EnvId == '[]' ] || [ $EnvId == 'null' ]; then
+          echo "Environment Id not created or found"
+          exit 1
+        fi
+        echo "Environment started with Id ${EnvId}"
+        echo "EnvId=${EnvId}"  >> $GITHUB_OUTPUT
+        
+    - name: Check Environment State
+      id: check-environment
+      run: |
+
+        check_env() {
+
+            env_state=$(curl -s --request GET \
+                  --url https://portal.qtorque.io/api/spaces/$SPACE_NAME/environments/${{ steps.start-environment.outputs.EnvId }} \
+                  --header "Authorization: Bearer ${{ secrets.TORQUE_TOKEN }}" \
+                  --header 'Content-Type: application/json'
+            )
+            state=$(echo $env_state | jq -r .details.computed_status)
+        }
+
+        check_env
+
+        if [ -z "$state" ]; then
+          echo "Env State not found, issue with api or pipeline"
+          echo $env_state
+          exit 1
+        fi
+
+        itr=0
+        timeout="301"
+
+        while [ "$state" == "Launching" ] && [ $itr -lt $timeout ]; do
+          echo "State is $state, waiting..."
+          ((itr = itr + 10))
+          sleep 10 # wait for 10 seconds before checking again
+          check_env
+        done
+
+        if [ $state = "Active" ]; then
+          echo "Environment completed successfully"
+        else
+          echo "Environment failed or did not complete within the $timeout seconds timeout, state is $state"
+          exit 1
+        fi
+    - name: End Environment
+      id: end-environment
+      run: |
+
+        echo "Ending Environment Id ${{ steps.start-environment.outputs.EnvId }}"
+        output=$(curl -s --request DELETE \
+              --url "https://portal.qtorque.io/api/spaces/$SPACE_NAME/environments/${{ steps.start-environment.outputs.EnvId }}?interrupt=false" \
+              --header "Authorization: Bearer ${{ secrets.TORQUE_TOKEN }}" \
+              --header 'Content-Type: application/json'
+              )
+        echo "Curl output: $output"
+        sleep 5s
+    - name: Validate Termination
+      id: validate-termination
+      run: |
+
+        check_env() {
+
+            env_state=$(curl -s --request GET \
+                  --url https://portal.qtorque.io/api/spaces/$SPACE_NAME/environments/${{ steps.start-environment.outputs.EnvId }} \
+                  --header "Authorization: Bearer ${{ secrets.TORQUE_TOKEN }}" \
+                  --header 'Content-Type: application/json'
+            )
+            state=$(echo $env_state | jq -r .details.computed_status)
+        }
+
+        check_env
+
+        if [ -z "$state" ]; then
+          echo "Env State not found, issue with api or pipeline"
+          echo $env_state
+          exit 1
+        fi
+
+        itr=0
+        timeout="180"
+
+        while [ "$state" == "Terminating" ] && [ $itr -lt $timeout ]; do
+          echo "State is $state, waiting..."
+          ((itr = itr + 10))
+          sleep 10 # wait for 10 seconds before checking again
+          check_env
+        done
+
+        if [ $state = "Ended" ]; then
+          echo "Environment terminated successfully"
+        else
+          echo "Environment failed termination or did not complete within the $timeout seconds timeout, state is $state"
+          exit 1
+        fi
