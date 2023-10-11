@@ -31,7 +31,7 @@ jobs:
               "environment_name": "${{ github.event.client_payload.bp_name }} Automated Github Test",
               "blueprint_name": "${{ github.event.client_payload.bp_name }}",
               "description": "Automated Test from Github",
-              "duration": "PT16M",
+              "duration": "PT20M",
               "source": {
                 "repository_name": "'"$SPACE_BP_REPO_NAME"'"
                 }
@@ -68,7 +68,7 @@ jobs:
         fi
 
         itr=0
-        timeout="301"
+        timeout="600"
 
         while [ "$state" == "Launching" ] && [ $itr -lt $timeout ]; do
           echo "State is $state, waiting..."
@@ -118,7 +118,7 @@ jobs:
         fi
 
         itr=0
-        timeout="180"
+        timeout="600"
 
         while [ "$state" == "Terminating" ] && [ $itr -lt $timeout ]; do
           echo "State is $state, waiting..."
