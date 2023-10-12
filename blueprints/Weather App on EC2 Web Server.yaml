@@ -7,10 +7,10 @@ inputs:
     allowed-values: ["eu-west-1"]
 outputs:
   Web Server IP:
-    value: '{{ .grains.Ubuntu_VM.outputs.ubuntu-ip }}'
+    value: '{{ .grains.["App Instance"].outputs.instance-ip }}'
     quick: false
   Web App Link:
-    value: '{{ .grains.Ubuntu_VM.outputs.ubuntu-port-link }}'
+    value: '{{ .grains.["App Instance"].outputs.instance-port-link }}'
     quick: true
 grains:
   Multi Subnet VPC:
@@ -20,7 +20,7 @@ grains:
         store: Torque-Samples
         path: blueprints
       inputs:
-        - aws_region: '{{ .inputs.aws_region }}'
+        - aws_region: '{{ .inputs.["AWS Region"] }}'
       outputs:
         - app_subnet_a_id
         - app_subnet_b_id
@@ -36,7 +36,7 @@ grains:
         name: Sample-Agent
       inputs:
       - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
-      - aws_region: '{{ .inputs.aws_region }}'
+      - aws_region: '{{ .inputs.["AWS Region"] }}'
       - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
       - instance_type: 't3a.medium'
       - keypair_name: 'TorqueSandbox'
