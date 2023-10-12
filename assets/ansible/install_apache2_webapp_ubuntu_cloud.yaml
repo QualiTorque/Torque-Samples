@@ -40,19 +40,19 @@
       dest: /var/www/html/index.html
       mode: 'a=r'
       force: true
-  - name: Download index.html and allow all to read it
+  - name: Download script.js and allow all to read it
     ansible.builtin.get_url:
       url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/script.js
       dest: /var/www/html/script.js
       mode: 'a=r'
       force: true
-  - name: Download index.html and allow all to read it
+  - name: Download styles.css and allow all to read it
     ansible.builtin.get_url:
       url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/styles.css
       dest: /var/www/html/styles.css
       mode: 'a=r'
       force: true
-  - name: Download index.html and allow all to read it
+  - name: Download bg.jpg and allow all to read it
     ansible.builtin.get_url:
       url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/bg.jpg
       dest: /var/www/html/bg.jpg
