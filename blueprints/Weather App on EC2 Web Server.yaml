@@ -46,6 +46,7 @@ grains:
       outputs:
       - instance-port-link
       - instance-ip
+    tf-version: 1.5.5
   Apache_Webapp_Install:
     depends-on: App Instance
     kind: ansible
