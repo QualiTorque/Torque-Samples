@@ -1,0 +1,60 @@
+- name: Install Apache2 on an Ubuntu Machine and download TetrisJS webgame to host on it
+  hosts: all
+  gather_facts: false
+  connection: ssh
+  tasks:
+  - name: Wait for system to become reachable
+    wait_for_connection:
+      timeout: 600
+  - name: Wait for cloud-init / user-data to finish
+    command: cloud-init status --wait
+    changed_when: false
+  - name: Install apache2 packages
+    become: yes
+    ansible.builtin.apt:
+      name: apache2
+      state: present
+      update_cache: yes
+      lock_timeout: 300
+    retries: 5
+    delay: 5      
+  - name: Ensure apache2 is running
+    become: yes
+    service:
+      name: apache2 
+      state: started
+  - name: Open port 80 for http access
+    become: yes
+    community.general.ufw:
+      rule: allow
+      port: 80
+      proto: tcp
+  - name: Restart the ufw (Ubuntu Firewall) service to load in the firewall changes
+    become: yes
+    service: 
+      name: ufw
+      state: restarted
+  - name: Download index.html and allow all to read it
+    ansible.builtin.get_url:
+      url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/index.html
+      dest: /var/www/html/index.html
+      mode: 'a=r'
+      force: true
+  - name: Download index.html and allow all to read it
+    ansible.builtin.get_url:
+      url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/script.js
+      dest: /var/www/html/script.js
+      mode: 'a=r'
+      force: true
+  - name: Download index.html and allow all to read it
+    ansible.builtin.get_url:
+      url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/styles.css
+      dest: /var/www/html/styles.css
+      mode: 'a=r'
+      force: true
+  - name: Download index.html and allow all to read it
+    ansible.builtin.get_url:
+      url: https://torque-prod-cfn-assets.s3.amazonaws.com/public-assets/WeatherApp/bg.jpg
+      dest: /var/www/html/bg.jpg
+      mode: 'a=r'
+      force: true

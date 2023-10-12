@@ -1,0 +1,69 @@
+spec_version: 2
+description: Sample Weather app deployed as a static website on an EC2 Ubuntu Linux VM using Terraform with Ansible post deployment installation and configuration.
+inputs:
+  AWS Region:
+    description: "The name of the AWS Region to use"
+    default: "eu-west-1"
+    allowed-values: ["eu-west-1"]
+outputs:
+  Web Server IP:
+    value: '{{ .grains.Ubuntu_VM.outputs.ubuntu-ip }}'
+    quick: false
+  Web App Link:
+    value: '{{ .grains.Ubuntu_VM.outputs.ubuntu-port-link }}'
+    quick: true
+grains:
+  Multi Subnet VPC:
+    kind: blueprint
+    spec:
+      source: 
+        store: Torque-Samples
+        path: blueprints
+      inputs:
+        - aws_region: '{{ .inputs.aws_region }}'
+      outputs:
+        - app_subnet_a_id
+        - app_subnet_b_id
+        - default_security_group_id
+  App Instance:
+    kind: terraform
+    depends-on: Multi Subnet VPC
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/terraform/aws/ec2_instance
+      agent:
+        name: Sample-Agent
+      inputs:
+      - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
+      - aws_region: '{{ .inputs.aws_region }}'
+      - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
+      - instance_type: 't3a.medium'
+      - keypair_name: 'TorqueSandbox'
+      - inbound_port: "80"
+      - source_ami: "ami-016587dea5af03adb | Ubuntu with credentials"      
+      env-vars: []
+      outputs:
+      - instance-port-link
+      - instance-ip
+  Apache_Webapp_Install:
+    depends-on: App Instance
+    kind: ansible
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/ansible/install_apache2_webapp_ubuntu_cloud.yaml
+      agent:
+        name: Sample-Agent
+      inventory-file:
+        all:
+          hosts:
+            ubuntu_machine:
+              ansible_host: '{{ .grains.["App Instance"].outputs.instance-ip }}'
+              ansible_user: 'ubuntu'
+              ansible_password: 'Quali@AWS'
+          vars:
+            ansible_become: yes 
+            ansible_become_method: sudo
+            ansible_become_pass: 'Quali@AWS'
+
