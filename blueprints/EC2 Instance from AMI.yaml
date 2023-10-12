@@ -1,0 +1,58 @@
+spec_version: 2
+description: EC2 Instance provisioned from a list of AWS built-in AMIs
+inputs:
+  AWS Region:
+    description: "The name of the AWS Region to use"
+    default: "eu-west-1"
+    allowed-values: ["eu-west-1"]
+  AMI ID: 
+    description: "The AMI to use for the EC2 Instance"
+    default: "ami-0b9fd8b55a6e3c9d5 | Amazon Linux 2023"
+    allowed-values:
+      - "ami-0b9fd8b55a6e3c9d5 | Amazon Linux 2023"
+      - "ami-01dd271720c1ba44f | Cannonical Ubuntu 22.04"
+      - "ami-00c896faf296575ab | Windows Server 2022 Base"
+      - "ami-013d87f7217614e10 | Red Hat Enterprise 9"
+  Instance Type:
+    description: "The Instance Type to use for the EC2 Instance"
+    default: "t3a.small"
+    allowed-values: ["t3a.small", t3a.medium", t3a.large"]
+outputs:
+  Instance IP:
+    value: '{{ .grains.["App Instance"].outputs.instance-ip }}'
+    quick: false
+grains:
+  Multi Subnet VPC:
+    kind: blueprint
+    spec:
+      source: 
+        store: Torque-Samples
+        path: blueprints
+      inputs:
+        - aws_region: '{{ .inputs.["AWS Region"] }}'
+      outputs:
+        - app_subnet_a_id
+        - app_subnet_b_id
+        - default_security_group_id
+  App Instance:
+    kind: terraform
+    depends-on: Multi Subnet VPC
+    spec:
+      source:
+        store: Torque-Samples
+        path: assets/terraform/aws/ec2_instance
+      agent:
+        name: Sample-Agent
+      inputs:
+      - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
+      - aws_region: '{{ .inputs.["AWS Region"] }}'
+      - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
+      - instance_type: 't3a.medium'
+      - keypair_name: 'TorqueSandbox'
+      - inbound_port: "80"
+      - source_ami: '{{ .inputs.["AMI ID"] }}'
+      env-vars: []
+      outputs:
+      - instance-port-link
+      - instance-ip
+    tf-version: 1.5.5
