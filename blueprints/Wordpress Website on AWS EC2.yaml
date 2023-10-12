@@ -15,8 +15,8 @@ inputs:
     default: root
   aws_region:
     type: string
-    default: il-central-1
-    allowed-values: ["il-central-1", "eu-west-1"]
+    default: eu-west-1
+    allowed-values: ["eu-west-1"]
   keypair_name:
     type: string
     default: TorqueSandbox

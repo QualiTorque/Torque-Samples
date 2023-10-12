@@ -3,8 +3,9 @@ description: A VPC with multiple subnets with an internet gateway (standardized 
 
 inputs:
   aws_region:
-    type: string
-    default: il-central-1
+    description: "The name of the AWS Region to use"
+    default: "eu-west-1"
+    allowed-values: ["eu-west-1"]
 outputs:
   app_subnet_a_id:
     value: '{{ .grains.EnvironmentInfrastructure.outputs.AppSubnetAID }}'

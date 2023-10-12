@@ -6,8 +6,8 @@ inputs:
     default: "webapp-bucket"
   AWS Region:
     description: "The name of the AWS Region to use"
-    default: "il-central-1"
-    allowed-values: ["us-west-1", "il-central-1", "eu-west-1"]
+    default: "eu-west-1"
+    allowed-values: ["eu-west-1"]
   Access Control:
     type: string
     description: >
