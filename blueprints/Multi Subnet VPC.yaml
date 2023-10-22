@@ -1,11 +1,10 @@
 spec_version: 2
-description: A VPC with multiple subnets with an internet gateway (standardized environment for other Blueprints)
-
+description: An AWS VPC with multiple subnets and an internet gateway (standardized environment for other Blueprints)
 inputs:
-  aws_region:
+  AWS Region:
     description: "The name of the AWS Region to use"
-    default: "eu-west-1"
-    allowed-values: ["eu-west-1"]
+    default: "Ireland | eu-west-1"
+    allowed-values: ["Ireland | eu-west-1"]
 outputs:
   app_subnet_a_id:
     value: '{{ .grains.EnvironmentInfrastructure.outputs.AppSubnetAID }}'
@@ -27,10 +26,10 @@ grains:
       agent:
         name: Sample-Agent
       inputs:
-      - Region: '{{ .inputs.aws_region }}'
+      - Region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       env-vars: []
       outputs:
       - AppSubnetAID
       - AppSubnetBID
       - DefaultSecurityGroupID
-      region: '{{ .inputs.aws_region }}'
+      region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'

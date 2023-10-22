@@ -1,6 +1,7 @@
 spec_version: 2
-description:  Wordpress app deployed on EC2 Instances with Instance based MySQL DB deployed using re-usable TF building blocks and nested Blueprint
-
+description:  >
+    Wordpress app deployed on EC2 Instances with Instance based MySQL DB 
+    deployed using re-usable TF building blocks and nested Blueprint
 # blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
 inputs:
   DB_NAME:
@@ -13,13 +14,10 @@ inputs:
   DB_USER:
     type: string
     default: root
-  aws_region:
-    type: string
-    default: eu-west-1
-    allowed-values: ["eu-west-1"]
-  keypair_name:
-    type: string
-    default: TorqueSandbox
+  AWS Region:
+    description: "The name of the AWS Region to use"
+    default: "Ireland | eu-west-1"
+    allowed-values: ["Ireland | eu-west-1"]
 
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
 outputs:
@@ -40,7 +38,7 @@ grains:
         store: Torque-Samples
         path: blueprints
       inputs:
-        - aws_region: '{{ .inputs.aws_region }}'
+        - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       outputs:
         - app_subnet_a_id
         - app_subnet_b_id
@@ -59,10 +57,10 @@ grains:
       - DB_PASS: '{{ .inputs.DB_PASS }}'
       - DB_USER: '{{ .inputs.DB_USER }}'
       - app_subnet_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
-      - aws_region: '{{ .inputs.aws_region }}'
+      - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
       - instance_type: t3a.medium
-      - keypair_name: '{{ .inputs.keypair_name }}'
+      - keypair_name: TorqueSandbox
       - use_public_ip: true
       env-vars: []
       outputs:
@@ -83,10 +81,10 @@ grains:
       - DB_USER: '{{ .inputs.DB_USER }}'
       - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
       - app_subnet_b_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_b_id }}'
-      - aws_region: '{{ .inputs.aws_region }}'
+      - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
       - instance_type: t3a.medium
-      - keypair_name: '{{ .inputs.keypair_name }}'
+      - keypair_name: TorqueSandbox
       - mysql_private_dns: '{{ .grains.MySQL_VM.outputs.mysql-private-dns }}'
       - use_public_ip: true
       env-vars: []

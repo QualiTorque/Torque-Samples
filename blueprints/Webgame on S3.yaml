@@ -1,13 +1,13 @@
 spec_version: 2
-description: Web-based game deployed as a static website on S3 using CFN and TF
+description: A single page HTML based Tetris game deployed as a static website on S3 using CFN and TF
 inputs:
   Bucket Name:
     description: "The name of the storage bucket that will be created"
     default: "webapp-bucket"
   AWS Region:
     description: "The name of the AWS Region to use"
-    default: "eu-west-1"
-    allowed-values: ["eu-west-1"]
+    default: "Ireland | eu-west-1"
+    allowed-values: ["Ireland | eu-west-1"]
   Access Control:
     type: string
     description: >
@@ -26,7 +26,7 @@ grains:
       source:
         store: Torque-Samples
         path: assets/cloudformation/AWSS3Bucket.yaml
-      region: '{{ .inputs.["AWS Region"] }}'
+      region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       agent:
         name: Sample-Agent
       inputs:
@@ -46,7 +46,7 @@ grains:
         name: Sample-Agent
       inputs:
       - bucket_name: '{{ .inputs.["Bucket Name"] }}-{{ envid | downcase }}'
-      - region: '{{ .inputs.["AWS Region"] }}'
+      - region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       outputs:
       - website_link
   App Health Check:

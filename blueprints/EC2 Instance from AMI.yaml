@@ -1,18 +1,18 @@
 spec_version: 2
-description: EC2 Instance provisioned from a list of AWS built-in AMIs
+description: An AWS EC2 Instance (Virtual Machine), provisioned from a list of AWS built-in AMIs
 inputs:
   AWS Region:
     description: "The name of the AWS Region to use"
-    default: "eu-west-1"
-    allowed-values: ["eu-west-1"]
+    default: "Ireland | eu-west-1"
+    allowed-values: ["Ireland | eu-west-1"]
   AMI ID: 
     description: "The AMI to use for the EC2 Instance"
-    default: "ami-0b9fd8b55a6e3c9d5 | Amazon Linux 2023"
+    default: "Amazon Linux 2023 | ami-0b9fd8b55a6e3c9d5"
     allowed-values:
-      - "ami-0b9fd8b55a6e3c9d5 | Amazon Linux 2023"
-      - "ami-01dd271720c1ba44f | Cannonical Ubuntu 22.04"
-      - "ami-00c896faf296575ab | Windows Server 2022 Base"
-      - "ami-013d87f7217614e10 | Red Hat Enterprise 9"
+      - "Amazon Linux 2023 | ami-0b9fd8b55a6e3c9d5"
+      - "Cannonical Ubuntu 22.04 | ami-01dd271720c1ba44f"
+      - "Windows Server 2022 Base | ami-00c896faf296575ab"
+      - "Red Hat Enterprise 9 | ami-013d87f7217614e10" 
   Instance Type:
     description: "The Instance Type to use for the EC2 Instance"
     default: "t3a.small"
@@ -29,7 +29,7 @@ grains:
         store: Torque-Samples
         path: blueprints
       inputs:
-        - aws_region: '{{ .inputs.["AWS Region"] }}'
+        - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       outputs:
         - app_subnet_a_id
         - app_subnet_b_id
@@ -45,12 +45,12 @@ grains:
         name: Sample-Agent
       inputs:
       - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
-      - aws_region: '{{ .inputs.["AWS Region"] }}'
+      - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
       - instance_type: 't3a.medium'
       - keypair_name: 'TorqueSandbox'
       - inbound_port: "80"
-      - source_ami: '{{ .inputs.["AMI ID"] }}'
+      - source_ami: '{{ .inputs.["AMI ID"] | split: "|" | last | strip }}'
       env-vars: []
       outputs:
       - instance-port-link

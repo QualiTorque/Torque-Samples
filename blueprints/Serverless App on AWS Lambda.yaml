@@ -1,6 +1,5 @@
 spec_version: 2
-description: A Hello World JS API Backened app running on AWS Lambda 
-
+description: A Sample "Hello World" JavaScript based API Backend running on AWS Lambda 
 inputs:
   API Input:
     type: string

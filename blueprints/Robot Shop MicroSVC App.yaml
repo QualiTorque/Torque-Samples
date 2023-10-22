@@ -1,6 +1,7 @@
 spec_version: 2
-description: Robot-Shop sample eCommerce MSVC app deployed on a K8S Cluster via Helm and RDS/S3 via TF
-
+description: >
+    A Sample eCommerce Micro-Service app (Stan's Robot Shop) 
+    deployed on a K8S Cluster using Helm using an RDS DB and an S3 bucket
 inputs:
   Robot Shop App Version:
     type: string
@@ -28,9 +29,6 @@ outputs:
   RDS MySQL DB Hostname:
     value: '{{ .grains.MySQL_RDS_DB.outputs.hostname }}'
     quick: false
-  Documentation Page:
-    value: "https://quali.atlassian.net/wiki/spaces/QS/pages/2710142977/Robot+Shop+Stan+s+Robot+Shop"
-    quick: true
 
 grains:
   MySQL_RDS_DB:
