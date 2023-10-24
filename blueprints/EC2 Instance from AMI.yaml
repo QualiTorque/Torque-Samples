@@ -1,5 +1,9 @@
 spec_version: 2
 description: An AWS EC2 Instance (Virtual Machine), provisioned from a list of AWS built-in AMIs
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/EC2_Instance.md
 inputs:
   AWS Region:
     description: "The name of the AWS Region to use"
@@ -16,7 +20,7 @@ inputs:
   Instance Type:
     description: "The Instance Type to use for the EC2 Instance"
     default: "t3a.small"
-    allowed-values: ["t3a.small", t3a.medium", t3a.large"]
+    allowed-values: ["t3a.small", "t3a.medium", "t3a.large"]
 outputs:
   Instance IP:
     value: '{{ .grains.["App Instance"].outputs.instance-ip }}'

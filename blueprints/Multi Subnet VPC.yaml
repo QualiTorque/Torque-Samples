@@ -1,5 +1,9 @@
 spec_version: 2
 description: An AWS VPC with multiple subnets and an internet gateway (standardized environment for other Blueprints)
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/Multi_Subnet_VPC.md
 inputs:
   AWS Region:
     description: "The name of the AWS Region to use"
