@@ -45,6 +45,4 @@ doing so will allow you to:
 - Expose additional Blueprint inputs or outputs 
 - customize the description and look and feel of the blueprint in your catalog
 
-## Please enjoy using this sample environment!
-
 ![Quali Logo](https://docs.qtorque.io/assets/images/logo-dm-f11e9cc418b94216dedd0b6e73e4a33d.svg)

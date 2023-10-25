@@ -15,7 +15,7 @@
 <br/> 
 
 ## Build your own copy 
-#### This Environment Blueprint's YAML code can be found in our Torque-Samples repository at [Github.com](https://github.com/QualiTorque/Torque-Samples/blob/main/blueprints/EC2%20Instance%20from%20AMI.yaml) and its underlying IaC components can be found in the [assets folder](https://github.com/QualiTorque/Torque-Samples/blob/main/assets/) of the same repository.
+#### This Environment Blueprint's YAML code can be found in our Torque-Samples repository at [Github.com](https://github.com/QualiTorque/Torque-Samples/blob/main/blueprints/Multi%20Subnet%20VPC.yaml) and its underlying IaC components can be found in the [assets folder](https://github.com/QualiTorque/Torque-Samples/blob/main/assets/) of the same repository.
 
 
 #### The Blueprint is comprised of the following grains:
@@ -44,7 +44,5 @@ doing so will allow you to:
 - Deploy the Blueprint on your Cloud Account 
 - Expose additional Blueprint inputs or outputs 
 - customize the description and look and feel of the blueprint in your catalog
-
-## Please enjoy using this sample environment!
 
 ![Quali Logo](https://docs.qtorque.io/assets/images/logo-dm-f11e9cc418b94216dedd0b6e73e4a33d.svg)
