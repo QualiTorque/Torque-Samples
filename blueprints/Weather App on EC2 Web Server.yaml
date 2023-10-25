@@ -2,6 +2,10 @@ spec_version: 2
 description: >
       A Sample Weather app deployed as a static website on an EC2 Ubuntu Linux VM 
       with Ansible post deployment installation and configuration.
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/Weather_App.md
 inputs:
   AWS Region:
     description: "The name of the AWS Region to use"
