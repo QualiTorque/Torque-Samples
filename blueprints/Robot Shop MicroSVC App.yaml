@@ -2,6 +2,10 @@ spec_version: 2
 description: >
     A Sample eCommerce Micro-Service app (Stan's Robot Shop) 
     deployed on a K8S Cluster using Helm using an RDS DB and an S3 bucket
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/Robot_Shop.md
 inputs:
   Robot Shop App Version:
     type: string
