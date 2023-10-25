@@ -7,10 +7,15 @@
 ![Environment Architecture](env_images/EC2_Instance_Arch.png)
 
 ## Environment Screenshots
+### Environment Grains View (allows updating assets or viewing drift and asset details)
 ![Environment Grains](env_images/EC2_Instance_Grains.png)
 <br/> 
+
+### Environment Resource Cards view (allows quick access to Day automation actions like Power On/Off and the ability to run workflows)
 ![Environment Cards](env_images/EC2_Instance_Cards.png)
 <br/> 
+
+### Environment Resources List view (clickable list of all deployed resources with their attribute values)
 ![Environment Resources](env_images/EC2_Instance_Resources.png)
 <br/> 
 
