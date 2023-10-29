@@ -3,6 +3,11 @@ description:  >
     Wordpress app deployed on EC2 Instances with Instance based MySQL DB 
     deployed using re-usable TF building blocks and nested Blueprint
 # blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/Wordpress.md
+
 inputs:
   DB_NAME:
     type: string
