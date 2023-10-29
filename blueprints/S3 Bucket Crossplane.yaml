@@ -7,6 +7,16 @@ instructions:
     store: Torque-Samples
     path: instructions/Robot_Shop.md
 # values that starts with '{' for liquid template must be encosed with quotes so YAML won't consider them as dict
+inputs:
+  Bucket Name Prefix:
+    type: string
+    default: robotshop-s3
+
+outputs:
+  Bucket ARN:
+    value: '{{.grains.S3_Bucket__crossplane.scripts.post-helm-install.outputs.bucket_arn}}'
+    quick: true
+
 grains:
   S3_Bucket__crossplane:
     kind: helm
@@ -19,5 +29,13 @@ grains:
       inputs:
         - AWSRegion: eu-west-1
         - BucketACL: private
-        - BucketName: 'robotshop-s3'
+        - BucketName: '{{ .inputs.["Bucket Name Prefix"] }}' 
         - EnvironmentID: '{{ envid | downcase }}'
+      scripts:
+        post-helm-install:
+          source:
+            store: Torque-Samples
+            path:  assets/scripts/get-bucket-arn.sh
+          arguments: '{{ .inputs.["Bucket Name Prefix"] }}-{{ envid | downcase }}'
+          outputs:
+            - bucket_arn
