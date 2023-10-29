@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.BucketName }}-{{ .Values.EnvironmentID }}
 spec:
   forProvider:  
-    region: {{ .Values.AWSRegion }}
+    locationConstraint: {{ .Values.AWSRegion }}
     acl: {{ .Values.BucketACL}}
   providerConfigRef:
     name: default
