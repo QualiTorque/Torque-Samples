@@ -1,0 +1,23 @@
+spec_version: 2
+description: >
+    A Sample eCommerce Micro-Service app (Stan's Robot Shop) 
+    deployed on a K8S Cluster using Helm using an RDS DB and an S3 bucket
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/Robot_Shop.md
+# values that starts with '{' for liquid template must be encosed with quotes so YAML won't consider them as dict
+grains:
+  S3_Bucket__crossplane:
+    kind: helm
+    spec: 
+      source:
+        store: Torque-Samples
+        path: assets/helm/s3__crossplane
+      agent:
+        name: Sample-Agent
+      inputs:
+        - AWSRegion: eu-west-1
+        - BucketACL: public-read
+        - BucketName: 'robotshop-s3'
+        - EnvironmentID: '{{ envid | downcase }}'

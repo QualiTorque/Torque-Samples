@@ -1,0 +1,4 @@
+BucketName: my-crossplane-bukcet
+EnvironmentID: ""
+AWSRegion: eu-west-1
+BucketACL: public-read  
