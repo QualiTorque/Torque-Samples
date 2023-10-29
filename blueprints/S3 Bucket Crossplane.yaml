@@ -18,6 +18,6 @@ grains:
         name: Sample-Agent
       inputs:
         - AWSRegion: eu-west-1
-        - BucketACL: public-read
+        - BucketACL: private
         - BucketName: 'robotshop-s3'
         - EnvironmentID: '{{ envid | downcase }}'
