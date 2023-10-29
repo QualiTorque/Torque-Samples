@@ -6,5 +6,11 @@ spec:
   forProvider:  
     locationConstraint: {{ .Values.AWSRegion }}
     acl: {{ .Values.BucketACL}}
+    publicAccessBlockConfiguration:
+        blockPublicAcls: False
+        blockPublicPolicy: False
+        ignorePublicAcls: False
+        restrictPublicBuckets: False
+    objectOwnership: 'ObjectWriter'
   providerConfigRef:
     name: default
