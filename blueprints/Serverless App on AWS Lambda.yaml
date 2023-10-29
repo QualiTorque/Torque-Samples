@@ -1,12 +1,13 @@
 spec_version: 2
 description: A Sample "Hello World" JavaScript based API Backend running on AWS Lambda 
+instructions:
+  source:
+    store: Torque-Samples
+    path: instructions/Serverless.md
 inputs:
   API Input:
     type: string
     default: Torque
-  Lambda Storage Bucket:
-    type: string
-    default: torque-samples-storage
 
 outputs:
   Serverless API App URL:
@@ -26,7 +27,7 @@ grains:
         name: Sample-Agent
       inputs:
       - aws_region: eu-west-1
-      - lambda_bucket_name: '{{ .inputs.["Lambda Storage Bucket"] }}'
+      - lambda_bucket_name: torque-samples-storage
       - lambda_iam_role: torque-lambda-exec
       env-vars: []
       outputs:
