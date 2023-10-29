@@ -1,6 +1,6 @@
 # **Instructions**
 ## Environment Overview - Wordpress Website on AWS EC2
-### This blueprint provisions a a wordpress website, deployed on a standardized cloud application environment.
+### This blueprint provisions a wordpress website, deployed on a standardized cloud application environment.
 
 ### The ingress traffic to the Wordpress website is funneled through an Application Load Balancer (ALB)
 <br/>
