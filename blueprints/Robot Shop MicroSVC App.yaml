@@ -80,7 +80,7 @@ grains:
 
   Robot_Shop_App_MicroServices:
     kind: helm
-    depends-on: MySQL_RDS_DB, S3_Bucket
+    depends-on: MySQL_RDS_DB, S3_Bucket__crossplane
     spec:
       source:
         store: Torque-Samples
