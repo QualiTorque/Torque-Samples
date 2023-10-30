@@ -74,7 +74,7 @@ grains:
           source:
             store: Torque-Samples
             path:  assets/scripts/get-bucket-arn.sh
-          arguments: '{{ .inputs.["Bucket Name Prefix"] }}-{{ envid | downcase }}'
+          arguments: 'robotshop-s3-samples-{{ envid | downcase }}'
           outputs:
             - bucket_arn
 
