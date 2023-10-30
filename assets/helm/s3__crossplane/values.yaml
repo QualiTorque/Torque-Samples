@@ -1,4 +1,4 @@
 BucketName: my-crossplane-bukcet
-EnvironmentID: ""
+EnvironmentID: torqueenvidnotpassed
 AWSRegion: eu-west-1
 BucketACL: public-read  
