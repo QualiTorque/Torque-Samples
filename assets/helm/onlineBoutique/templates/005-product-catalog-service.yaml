@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productcatalogservice-{{ .Values.EnvironmentID }}
+spec:
+  selector:
+    matchLabels:
+      app: productcatalogservice-{{ .Values.EnvironmentID }}
+  template:
+    metadata:
+      labels:
+        app: productcatalogservice-{{ .Values.EnvironmentID }}
+    spec:
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 5
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+      - name: server
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+        image: gcr.io/google-samples/microservices-demo/productcatalogservice:v0.8.0
+        ports:
+        - containerPort: 3550
+        env:
+        - name: PORT
+          value: "3550"
+        - name: DISABLE_PROFILER
+          value: "1"
+        readinessProbe:
+          grpc:
+            port: 3550
+        livenessProbe:
+          grpc:
+            port: 3550
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: productcatalogservice-{{ .Values.EnvironmentID }}
+spec:
+  type: ClusterIP
+  selector:
+    app: productcatalogservice-{{ .Values.EnvironmentID }}
+  ports:
+  - name: grpc
+    port: 3550
+    targetPort: 3550

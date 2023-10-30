@@ -1,0 +1,4 @@
+apiVersion: v1
+name: online-boutique
+version: 0.0.1
+description: '"Online Boutique" Sample Micro-Services e-commerce app.'

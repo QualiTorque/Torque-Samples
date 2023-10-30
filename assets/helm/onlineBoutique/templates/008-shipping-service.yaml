@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shippingservice-{{ .Values.EnvironmentID }}
+spec:
+  selector:
+    matchLabels:
+      app: shippingservice-{{ .Values.EnvironmentID }}
+  template:
+    metadata:
+      labels:
+        app: shippingservice-{{ .Values.EnvironmentID }}
+    spec:
+      serviceAccountName: default
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+      - name: server
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+        image: gcr.io/google-samples/microservices-demo/shippingservice:v0.8.0
+        ports:
+        - containerPort: 50051
+        env:
+        - name: PORT
+          value: "50051"
+        - name: DISABLE_PROFILER
+          value: "1"
+        readinessProbe:
+          periodSeconds: 5
+          grpc:
+            port: 50051
+        livenessProbe:
+          grpc:
+            port: 50051
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shippingservice-{{ .Values.EnvironmentID }}
+spec:
+  type: ClusterIP
+  selector:
+    app: shippingservice-{{ .Values.EnvironmentID }}
+  ports:
+  - name: grpc
+    port: 50051
+    targetPort: 50051
