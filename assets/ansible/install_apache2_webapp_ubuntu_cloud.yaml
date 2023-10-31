@@ -15,9 +15,9 @@
       name: apache2
       state: present
       update_cache: yes
-      lock_timeout: 300
-    retries: 5
-    delay: 5      
+      lock_timeout: 600
+    retries: 10
+    delay: 10   
   - name: Ensure apache2 is running
     become: yes
     service:
