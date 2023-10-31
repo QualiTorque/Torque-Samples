@@ -51,7 +51,7 @@ grains:
       - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
       - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       - default_security_group_id: '{{ .grains.["Multi Subnet VPC"].outputs.default_security_group_id }}'
-      - instance_type: 't3a.medium'
+      - instance_type: '{{ .inputs.["Instance Type"] }}'
       - keypair_name: 'TorqueSandbox'
       - inbound_port: "80"
       - source_ami: '{{ .inputs.["AMI ID"] | split: "|" | last | strip }}'
