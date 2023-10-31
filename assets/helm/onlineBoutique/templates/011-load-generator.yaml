@@ -45,7 +45,7 @@ spec:
         image: busybox:latest
         env:
         - name: FRONTEND_ADDR
-          value: "frontend:80"
+          value: "frontend-{{ .Values.EnvironmentID }}:80"
       containers:
       - name: main
         securityContext:
