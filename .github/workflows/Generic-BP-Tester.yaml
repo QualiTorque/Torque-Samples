@@ -41,7 +41,8 @@ jobs:
             )
         EnvId=$( echo $env | jq --raw-output .id )
         if [ -z "$EnvId" ] || [ $EnvId == '[]' ] || [ $EnvId == 'null' ]; then
-          echo "Environment Id not created or found"
+          echo "Environment Id not created or found, please see curl output below"
+          echo $env
           exit 1
         fi
         echo "Environment started with Id ${EnvId}"
