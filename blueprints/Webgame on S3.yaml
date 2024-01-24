@@ -63,5 +63,5 @@ grains:
         deploy:
           commands:
             - "echo fetching Webgame page"
-            - "apt-get install curl -y"
+            - "apt update -y && apt-get install curl -y"
             - 'curl -I {{ .grains.["S3 Webapp Upload"].outputs.website_link }} | head -n 1'
