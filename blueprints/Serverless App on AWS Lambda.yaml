@@ -46,5 +46,5 @@ grains:
         deploy:
           commands:
             - "echo fetching lambda api"
-            - "apt-get install curl -y -qq"
+            - "apt update -y && apt-get install curl -y"
             - 'curl {{ .grains.["Serverless API"].outputs.base_url }}/hello?Name={{ .inputs.["API Input"] }} -s'
