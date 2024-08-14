@@ -26,7 +26,7 @@ outputs:
     value: '{{ .grains.["App Instance"].outputs.instance-ip }}'
     quick: false
 grains:
-  Multi Subnet VPC:
+  Multi-Subnet-VPC:
     kind: blueprint
     spec:
       source: 
