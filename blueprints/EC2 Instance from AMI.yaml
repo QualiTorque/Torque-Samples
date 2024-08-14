@@ -31,7 +31,7 @@ grains:
     spec:
       source: 
         store: Torque-Samples
-        path: blueprints
+        path: 'blueprints/Multi Subnet VPC.yaml'
       inputs:
         - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
       outputs:
