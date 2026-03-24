@@ -18,8 +18,8 @@ inputs:
     allowed-values: ["small", "medium", "large"]
   DB Engine Version:
     type: string
-    default: "8.0.32"
-    description: "Version of RDS MySQL DB Engine. Default is 8.0.32"
+    default: "8.0.45"
+    description: "Version of RDS MySQL DB Engine. Default is 8.0.45"
 
 
 # values that starts with '{' for liquid template must be encosed with quotes so YAML won't consider them as dict
