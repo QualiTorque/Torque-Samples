@@ -6,10 +6,10 @@
   - name: Wait for system to become reachable
     wait_for_connection:
       timeout: 300
+    failed_when: false
   - name: Wait for cloud-init / user-data to finish
     command: cloud-init status --wait
     changed_when: false
-    failed_when: false
   - name: Install apache2 packages
     become: yes
     ansible.builtin.apt:
