@@ -10,6 +10,7 @@
   - name: Wait for cloud-init / user-data to finish
     command: cloud-init status --wait
     changed_when: false
+    failed_when: false # Lenient failure to suppress silent minor errors from cloud-init
   - name: Install apache2 packages
     become: yes
     ansible.builtin.apt:
