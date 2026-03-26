@@ -36,6 +36,7 @@ resource "aws_instance" "ubuntu_instance" {
   instance_type = var.instance_type
   key_name = var.keypair_name
   subnet_id = data.aws_subnet.app_subnet.id
+  user_data = replace(file("${path.module}/cloud-init.yaml"), "%%PASSWORD%%", var.ubuntu_password)
   vpc_security_group_ids = [ aws_security_group.ubuntu_Security_Group.id, var.default_security_group_id ]
 }
 

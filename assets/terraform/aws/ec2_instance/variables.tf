@@ -30,3 +30,7 @@ variable "inbound_port" {
   type = string
   default = "80"
 }
+
+variable "ubuntu_password" {
+  
+}
