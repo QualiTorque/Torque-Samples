@@ -13,10 +13,6 @@ provider "aws" {
     region = var.aws_region
 }
 
-locals {
-  ami_id = strcontains(var.source_ami, "|") ? trimspace(split("|", var.source_ami)[0]) : var.source_ami
-}
-
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"]   # Canonical
