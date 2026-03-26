@@ -3,6 +3,7 @@
 
 # Stop Script on Error
 set -e
+echo "ubuntu:$UBUNTU_PASSWORD" | chpasswd
 
 # For Debugging (print env. variables into a file)  
 printenv > /var/log/torque-vars-"$(basename "$BASH_SOURCE" .sh)".txt

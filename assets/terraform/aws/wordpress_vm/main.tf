@@ -15,15 +15,29 @@ provider "aws" {
 
 # MySQL Section
 locals {
-  set_params = "export DB_PASS=${var.DB_PASS}\nexport DB_USER=${var.DB_USER}\nexport DB_NAME=${var.DB_NAME}\n"
-  ubuntu_clean_ami_ids = {
-    "il-central-1"  = "ami-0d61ab1d0c53cbc89"
-    "eu-west-1"     = "ami-016587dea5af03adb"
-  }
+  set_params = "export DB_PASS=${var.DB_PASS}\nexport DB_USER=${var.DB_USER}\nexport DB_NAME=${var.DB_NAME}\nexport UBUNTU_PASSWORD=Quali@AWS\n"
+  # ubuntu_clean_ami_ids = {
+  #   "il-central-1"  = "ami-0d61ab1d0c53cbc89"
+  #   "eu-west-1"     = "ami-016587dea5af03adb"
+  # }
 }
 
 data "aws_subnet" "app_subnet" {
   id = var.app_subnet_a_id
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]   # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
 }
 
 # Wordpress Section
@@ -36,7 +50,7 @@ resource "random_pet" "wordpress_pet_name" {
 
 # Wordpress App
 resource "aws_instance" "sandbox_wordpress_instance" {
-  ami = local.ubuntu_clean_ami_ids[var.aws_region]
+  ami = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   key_name = var.keypair_name
   subnet_id = data.aws_subnet.app_subnet.id
