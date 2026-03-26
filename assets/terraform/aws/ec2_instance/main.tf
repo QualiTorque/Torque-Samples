@@ -17,12 +17,26 @@ locals {
   ami_id = strcontains(var.source_ami, "|") ? trimspace(split("|", var.source_ami)[0]) : var.source_ami
 }
 
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]   # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
 data "aws_subnet" "app_subnet" {
   id = var.app_subnet_a_id
 }
 
 resource "aws_instance" "ubuntu_instance" {
-  ami = local.ami_id
+  ami = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   key_name = var.keypair_name
   subnet_id = data.aws_subnet.app_subnet.id

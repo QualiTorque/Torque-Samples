@@ -30,8 +30,3 @@ variable "inbound_port" {
   type = string
   default = "80"
 }
-
-variable "source_ami" {
-  type = string
-  default = "ami-016587dea5af03adb | Ubuntu with credentials"
-}

@@ -47,7 +47,6 @@ grains:
       - instance_type: 't3a.medium'
       - keypair_name: 'TorqueSandbox'
       - inbound_port: "80"
-      - source_ami: "ami-016587dea5af03adb | Ubuntu with credentials"      
       env-vars: []
       outputs:
       - instance-port-link
