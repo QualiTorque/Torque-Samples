@@ -36,7 +36,7 @@ echo "****************************************************************"
 echo "****************************************************************"
 echo "Installing Wordpress from latest wordpress release"
 echo "****************************************************************"
-wget -c http://wordpress.org/latest.tar.gz -O wordpress.tar.gz 
+wget -c https://wordpress.org/wordpress-5.9.10.tar.gz -O wordpress.tar.gz 
 tar -xzvf wordpress.tar.gz
 rsync -av wordpress/* /var/www/html/
 chown -R www-data:www-data /var/www/html/
