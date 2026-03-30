@@ -3,10 +3,10 @@
 
 # Stop Script on Error
 set -e
-echo "ubuntu:$UBUNTU_PASSWORD" | chpasswd
-sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sed -i 's/^#\?ChallengeResponseAuthentication.*/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
-systemctl restart sshd
+#echo "ubuntu:$UBUNTU_PASSWORD" | chpasswd
+#sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+#sed -i 's/^#\?ChallengeResponseAuthentication.*/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+#systemctl restart sshd
 
 # For Debugging (print env. variables into a file)  
 printenv > /var/log/torque-vars-"$(basename "$BASH_SOURCE" .sh)".txt
@@ -29,7 +29,7 @@ systemctl start apache2
 echo "****************************************************************"
 echo "Installing PHP Modules"
 echo "****************************************************************"
-apt-get install php7.0 php7.0-mysql libapache2-mod-php7.0 php7.0-cli php7.0-cgi php7.0-gd -y
+apt-get install php php-mysql libapache2-mod-php php-cli php-cgi php-gd -y
 
 
 
