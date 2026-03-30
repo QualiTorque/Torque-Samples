@@ -4,7 +4,8 @@
 # Stop Script on Error
 set -e
 echo "ubuntu:$UBUNTU_PASSWORD" | chpasswd
-sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/^#\?ChallengeResponseAuthentication.*/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
 systemctl restart sshd
 
 # For Debugging (print env. variables into a file)  
