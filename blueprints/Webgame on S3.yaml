@@ -8,6 +8,8 @@ inputs:
   Bucket Name:
     description: "The name of the storage bucket that will be created"
     default: "webapp-bucket"
+    allowed-values:
+    - "webapp-bucket"
   AWS Region:
     description: "The name of the AWS Region to use"
     default: "Ireland | eu-west-1"
