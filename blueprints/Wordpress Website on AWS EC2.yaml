@@ -12,13 +12,16 @@ inputs:
   DB_NAME:
     type: string
     default: wordpress_demo
+    allowed-values: wordpress_demo
   DB_PASS:
     type: string
-    default: 12345
+    default: "12345"
+    allowed-values: "12345"
     sensitive: true
   DB_USER:
     type: string
     default: root
+    allowed-values: root
   AWS Region:
     description: "The name of the AWS Region to use"
     default: "Ireland | eu-west-1"
