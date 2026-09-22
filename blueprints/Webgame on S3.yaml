@@ -19,8 +19,8 @@ inputs:
     description: >
       Type of access to configure on Bucket objects: Private, PublicRead, PublicReadWrite, AuthenticatedRead,
       LogDeliveryWrite, BucketOwnerRead, BucketOwnerFullControl, or AwsExecRead
-    default: "PublicRead"
-    allowed-values: ["Private", "PublicRead", "PublicReadWrite"]
+    default: "Private"
+    allowed-values: ["Private"]
 outputs:
   Webgame Link:
     value: '{{ .grains.["S3 Webapp Upload"].outputs.website_link }}'
