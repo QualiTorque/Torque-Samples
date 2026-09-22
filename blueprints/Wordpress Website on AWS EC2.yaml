@@ -14,12 +14,6 @@ inputs:
     default: wordpress_demo
     allowed-values: 
     - wordpress_demo
-  DB_PASS:
-    type: string
-    default: "12345"
-    allowed-values: 
-    - "12345"
-    sensitive: true
   DB_USER:
     type: string
     default: root
@@ -65,7 +59,7 @@ grains:
         name: Sample-Agent
       inputs:
       - DB_NAME: '{{ .inputs.DB_NAME }}'
-      - DB_PASS: '{{ .inputs.DB_PASS }}'
+      - DB_PASS: '12345' # change it to your own value
       - DB_USER: '{{ .inputs.DB_USER }}'
       - app_subnet_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
       - aws_region: '{{ .inputs.["AWS Region"] | split: "|" | last | strip }}'
@@ -88,7 +82,7 @@ grains:
         name: Sample-Agent
       inputs:
       - DB_NAME: '{{ .inputs.DB_NAME }}'
-      - DB_PASS: '{{ .inputs.DB_PASS }}'
+      - DB_PASS: '12345' # change it to your own value
       - DB_USER: '{{ .inputs.DB_USER }}'
       - app_subnet_a_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_a_id }}'
       - app_subnet_b_id: '{{ .grains.["Multi Subnet VPC"].outputs.app_subnet_b_id }}'
