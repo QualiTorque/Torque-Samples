@@ -11,6 +11,8 @@ inputs:
     type: string
     default: "0.4.3"
     description: "Version of the robotShop micorservices application"
+    allowed-values:
+    - "0.4.3"
   DB Engine Instance Size:
     type: string
     default: "small"
@@ -20,6 +22,8 @@ inputs:
     type: string
     default: "8.0.45"
     description: "Version of RDS MySQL DB Engine. Default is 8.0.45"
+    allowed-values:
+    - "8.0.45"
 
 
 # values that starts with '{' for liquid template must be encosed with quotes so YAML won't consider them as dict
